@@ -182,6 +182,3 @@ scripts/verify/       # Deterministic data-integrity checks
 
 ---
 
-## License
-
-Private — hackathon submission. Not licensed for redistribution.

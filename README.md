@@ -9,7 +9,7 @@ Browser-based ER + polyclinic clinical training simulator. You play the doctor: 
 
 ## About
 
-Medkit is a voice-first AI patient simulator for medical students and newly graduated doctors. You take the history, order labs, read imaging, diagnose, and prescribe — talking to AI patients in real time. After each session, an attending grader powered by Claude Opus 4.7 marks your communication, history-taking, and clinical reasoning, citing published guidelines (NICE, ESC, AHA, GINA, GOLD) from a curated registry so the grading can't fabricate sources.
+Medicate is a voice-first AI patient simulator for medical students and newly graduated doctors. You take the history, order labs, read imaging, diagnose, and prescribe — talking to AI patients in real time. After each session, an attending grader powered by Claude Opus 4.7 marks your communication, history-taking, and clinical reasoning, citing published guidelines (NICE, ESC, AHA, GINA, GOLD) from a curated registry so the grading can't fabricate sources.
 
 The format is modelled on OSCE training with standardised patients, which works well but is expensive, scheduled rarely, requires physical attendance, and isn't available in many countries — leaving most trainees globally with little or no access. Medkit makes the same kind of practice available on demand in the browser.
 
@@ -20,7 +20,7 @@ The format is modelled on OSCE training with standardised patients, which works 
 |---|---|
 | Frontend | React 18 + TypeScript + Vite, Three.js (`@react-three/fiber`, `@react-three/drei`) |
 | Voice transport | LiveKit Cloud (WebRTC) via `livekit-client` |
-| Voice worker | Python `livekit-agents` — Deepgram Nova-3 STT → Claude Haiku 4.5 → Cartesia Sonic-2 TTS |
+| Voice worker | Python `medicate-agents` — Deepgram Nova-3 STT → Claude Haiku 4.5 → Cartesia Sonic-2 TTS |
 | HTTP backend | FastAPI on `127.0.0.1:8787` — Managed Agents proxy + LiveKit JWT mint |
 | Attending grader | Claude **Opus 4.7** as a Managed Agent (`medkit-attending`) |
 | State | Single `Store` class with `useSyncExternalStore` (no Redux/Zustand) |
@@ -170,7 +170,7 @@ scripts/verify/       # Deterministic data-integrity checks
 | Call | Model | Why |
 |---|---|---|
 | Patient voice persona | Haiku 4.5 | Fast, cheap, good enough for in-character reply |
-| `medkit-attending` grading | **Opus 4.7** | Clinical reasoning, precision matters |
+| `medicate-attending` grading | **Opus 4.7** | Clinical reasoning, precision matters |
 
 ---
 

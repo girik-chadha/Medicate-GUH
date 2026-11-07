@@ -1,8 +1,8 @@
 ---
-description: Run deterministic simulator invariants and append PASS/FAIL to verify.log. Safe for `/loop 20m /medkit-verify-simulation`.
+description: Run deterministic simulator invariants and append PASS/FAIL to verify.log. Safe for `/loop 20m /medicate-verify-simulation`.
 ---
 
-# `/medkit-verify-simulation`
+# `/medicate-verify-simulation`
 
 Long-running verification tick. Designed to be fired every 20 minutes
 via `/loop 20m /medkit-verify-simulation` so the simulator's invariants

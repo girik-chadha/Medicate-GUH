@@ -48,7 +48,8 @@ All keys are server-side only — the browser never sees them. Get one of each:
 | **Anthropic** | Powers the attending grader (Opus 4.7) and patient voice persona (Haiku 4.5) | https://console.anthropic.com → API Keys | Pay-as-you-go, no free tier |
 | **LiveKit Cloud** | Real-time WebRTC transport between browser ↔ voice worker | https://cloud.livekit.io → create project → Settings → Keys (gives `URL`, `API Key`, `API Secret`) | Yes — generous free tier |
 | **Deepgram** | Streaming speech-to-text inside the voice worker | https://console.deepgram.com → API Keys | Yes — $200 free credit |
-| **Cartesia** | Streaming text-to-speech inside the voice worker | https://play.cartesia.ai → API Keys | Yes — free credit on signup |
+| **ElevenLabs** | Streaming text-to-speech inside the voice worker: gives each patient a voice matched to their age and gender | https://elevenlabs.io → profile → API Keys → create a key (turn on **Text to Speech** and **Voices: Read** if restricted). Set as `ELEVENLABS_API_KEY` | Yes — limited monthly free credits |
+| **n8n** | Receives each finished encounter and every "Ask my tutor" escalation from the backend | No API key. Create a workflow with a **Webhook** node (POST), copy its **Production URL**, set as `N8N_WEBHOOK_URL`, and activate the workflow | Yes if self-hosted (Community Edition); n8n Cloud has a trial, then paid plans |
 
 ---
 

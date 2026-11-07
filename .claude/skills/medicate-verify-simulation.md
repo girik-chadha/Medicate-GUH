@@ -1,9 +1,9 @@
 ---
-name: medkit-verify-simulation
+name: medicate-verify-simulation
 description: Run the deterministic verification scripts over the simulator's data and state. Use whenever you change anything under src/data/, src/game/store.ts, src/game/types.ts, or finish a batch of 3D-scene edits. Also call before committing and before submission.
 ---
 
-# medkit — verification skill
+# medicate — verification skill
 
 The simulator has a set of deterministic checks in `scripts/verify/` that catch:
 

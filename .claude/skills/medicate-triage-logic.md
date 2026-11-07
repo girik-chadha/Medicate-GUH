@@ -1,5 +1,5 @@
 ---
-name: medkit-triage-logic
+name: medicate-triage-logic
 description: Reference for ESI-style triage reasoning used anywhere the simulator makes a triage decision — in case authoring (severity labels), in the attending Managed Agent's grading, or in the triage-priority verification script. Use this skill when the user asks about triage zones, ESI levels, the difference between critical/urgent/stable, or how the attending agent should reason about priority.
 ---
 

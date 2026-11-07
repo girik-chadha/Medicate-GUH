@@ -4,7 +4,7 @@ const radSrc = fs.readFileSync('src/data/radiologyImages.ts','utf8');
 
 const imgSet = ['cxr','kub','xr-extrem','xr-spine','xr-pelvis','us-abdomen','us-pelvis','echo','ct-head','ct-chest','ct-angio','ct-abdomen','ct-cspine','mri-brain','mri-cspine','mri-lspine','mri-abd','ecg'];
 
-// Rough tag extraction: find the pool block between "<test>':" and the next pool key OR the closing of ABNORMAL_BY_TEST.
+// Rough tag extraction: find the pool block between "<test>':" and the next pool key OR the closing of ABNORMAL_BY_TEST
 const abnIdx = radSrc.indexOf('ABNORMAL_BY_TEST');
 const abnBlock = radSrc.slice(abnIdx);
 

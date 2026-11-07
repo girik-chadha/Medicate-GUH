@@ -3,14 +3,14 @@
 Runs as a separate process from the FastAPI server. Joins every LiveKit
 room created by the frontend and roleplays the patient over WebRTC:
 
-    Browser mic → Deepgram Nova-3 STT → Claude Haiku 4.5 → Cartesia Sonic-2 TTS → Browser
+    Browser mic → Deepgram Nova-3 STT → Claude Haiku 4.5 → ElevenLabs TTS → Browser
 
-The persona prompt and voice ID come from room metadata (set by the
-backend `/voice/token` endpoint when the room is created), so this
-worker has zero patient-specific knowledge — TS owns that.
+The persona prompt, speaker gender and speaker age come from room metadata
+(set by the backend `/voice/token` endpoint when the room is created). The
+ElevenLabs voice for each persona lives in `backend/voices.json`.
 
-Run:
-    backend/.venv-voice/Scripts/python.exe backend/voice_agent.py dev
+Run (WSL; -P keeps the script dir off sys.path so imports stay fast on /mnt/c):
+    backend/.venv-voice/bin/python -P backend/voice_agent.py dev
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from livekit import agents, rtc
 from livekit.agents import Agent, AgentSession, RoomInputOptions, WorkerOptions, cli
-from livekit.plugins import anthropic, cartesia, deepgram, silero
+from livekit.plugins import anthropic, deepgram, elevenlabs, silero
 
 # Load .env.local first (project convention), .env as fallback.
 _BACKEND = Path(__file__).resolve().parent
@@ -35,20 +35,12 @@ logger = logging.getLogger("medkit.voice-agent")
 logger.setLevel(logging.INFO)
 
 
-# Cartesia Sonic-2 voice IDs — verified via /voices API (gender attr).
-# 2 male + 2 female English voices, picked deterministically per case.
-VOICE_IDS = {
-    "M": [
-        "d709a7e8-9495-4247-aef0-01b3207d11bf",  # Donny - Steady Presence
-        "ea7c252f-6cb1-45f5-8be9-b4f6ac282242",  # Logan - Approachable Friend
-    ],
-    "F": [
-        "cec7cae1-ac8b-4a59-9eac-ec48366f37ae",  # Haley - Engaging Friend
-        "ea93f57f-7c71-4d79-aeaa-0a39b150f6ca",  # Diana - Gentle Mom
-    ],
-}
+# ElevenLabs voices per patient persona — see backend/voices.json.
+VOICE_CONFIG = json.loads((_BACKEND / "voices.json").read_text(encoding="utf-8"))
+DEFAULT_VOICE: str = VOICE_CONFIG["default"]
+TTS_MODEL: str = VOICE_CONFIG.get("model", "eleven_flash_v2_5")
+ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY") or os.environ.get("ELEVEN_API_KEY", "")
 
-DEFAULT_VOICE = VOICE_IDS["M"][0]
 DEFAULT_INSTRUCTIONS = (
     "You are a patient speaking to a doctor. Keep replies to 1-2 short spoken "
     "sentences. Output spoken dialogue only — no stage directions, no asterisks."
@@ -66,9 +58,26 @@ def _hash_str(s: str) -> int:
     return h
 
 
-def pick_voice(case_id: str, gender: str) -> str:
-    pool = VOICE_IDS.get(gender.upper()) or VOICE_IDS["M"]
-    return pool[_hash_str(case_id) % len(pool)]
+def persona_key(gender: str, age: int | None) -> str:
+    """'F_young' / 'M_adult' / ... — the key into voices.json `personas`."""
+    bands = VOICE_CONFIG.get("age_bands", {"young": 35, "older": 65})
+    if age is None:
+        band = "adult"
+    elif age < bands["young"]:
+        band = "young"
+    elif age >= bands["older"]:
+        band = "older"
+    else:
+        band = "adult"
+    return f"{(gender or 'M').upper()[:1]}_{band}"
+
+
+def pick_voice(case_id: str, gender: str, age: int | None) -> str:
+    """Per-case override → persona (gender × age band) → default."""
+    override = VOICE_CONFIG.get("cases", {}).get(case_id)
+    if override:
+        return override
+    return VOICE_CONFIG.get("personas", {}).get(persona_key(gender, age)) or DEFAULT_VOICE
 
 
 def parse_metadata(raw: str | None) -> dict:
@@ -90,17 +99,22 @@ async def entrypoint(ctx: agents.JobContext):
     system_prompt = meta.get("systemPrompt") or DEFAULT_INSTRUCTIONS
     initial_line = meta.get("initialLine") or DEFAULT_INITIAL
 
-    voice_id = meta.get("voiceId") or pick_voice(case_id, speaker_gender)
+    try:
+        speaker_age = int(meta["voiceAge"]) if meta.get("voiceAge") is not None else None
+    except (TypeError, ValueError):
+        speaker_age = None
+
+    voice_id = meta.get("voiceId") or pick_voice(case_id, speaker_gender, speaker_age)
 
     logger.info(
-        "joining room=%s case=%s gender=%s voice=%s",
-        ctx.room.name, case_id, speaker_gender, voice_id,
+        "joining room=%s case=%s persona=%s voice=%s",
+        ctx.room.name, case_id, persona_key(speaker_gender, speaker_age), voice_id,
     )
 
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="en"),
         llm=anthropic.LLM(model="claude-haiku-4-5-20251001", temperature=0.8),
-        tts=cartesia.TTS(model="sonic-2", voice=voice_id),
+        tts=elevenlabs.TTS(voice_id=voice_id, model=TTS_MODEL, api_key=ELEVENLABS_API_KEY),
         vad=silero.VAD.load(),
     )
 

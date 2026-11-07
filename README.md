@@ -12,9 +12,6 @@ Medkit is a voice-first AI patient simulator for medical students and newly grad
 
 The format is modelled on OSCE training with standardised patients, which works well but is expensive, scheduled rarely, requires physical attendance, and isn't available in many countries — leaving most trainees globally with little or no access. Medkit makes the same kind of practice available on demand in the browser.
 
-Built in three days for the Opus 4.7 hackathon by a medical-doctor-turned-software-engineer ([@bedriyan](https://github.com/bedriyan)), using Claude Code with Opus 4.7.
-
----
 
 ## What's inside
 
@@ -94,7 +91,6 @@ LIVEKIT_URL=wss://your-project.livekit.cloud
 LIVEKIT_API_KEY=APIxxxx
 LIVEKIT_API_SECRET=...
 DEEPGRAM_API_KEY=...
-CARTESIA_API_KEY=...
 
 # Leave these blank on first run — see "Bootstrap the Managed Agent" below
 MEDKIT_AGENT_ID=

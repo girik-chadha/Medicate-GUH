@@ -83,19 +83,19 @@ export function SplashScreen() {
               fontSize: 168,
               lineHeight: 1,
               letterSpacing: '-0.04em',
-              color: 'var(--cream)',
+              color: '#00B8A9',
               WebkitTextStroke: '5px var(--line)',
               paintOrder: 'stroke fill',
               textShadow: '0 8px 0 var(--line)',
               display: 'flex',
               alignItems: 'center',
-              gap: 14,
+              gap: 0,
             }}
           >
-            med
-            <span style={{ color: 'var(--peach)' }}>kit</span>
-            <span className="wobble" style={{ display: 'inline-block', marginLeft: 8, marginBottom: 30 }}>
-              <Doodle kind="cross" size={86} color="#F47A92" />
+            Medi
+            <span style={{ color: '#FF5A4E' }}>cate</span>
+            <span className="wobble" style={{ display: 'inline-block', marginLeft: 22, marginBottom: 30 }}>
+              <Doodle kind="cross" size={86} color="#FFB800" />
             </span>
           </div>
         </div>

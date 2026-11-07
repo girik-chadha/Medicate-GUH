@@ -405,6 +405,7 @@ interface WordmarkProps {
 export function Wordmark({ size = 36, dark = false }: WordmarkProps) {
   return (
     <div
+      className="wordmark"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -412,21 +413,23 @@ export function Wordmark({ size = 36, dark = false }: WordmarkProps) {
         fontFamily: 'Nunito',
         fontWeight: 900,
         fontSize: size,
-        color: dark ? 'white' : 'var(--ink)',
+        // #00B8A9 deepened slightly: the header "Medi" has no outline, and pure
+        // #00B8A9 is 2.5:1 on white (needs 3:1 for large text).
+        color: dark ? 'white' : '#00968A',
         letterSpacing: '-0.02em',
       }}
     >
       <span style={{ position: 'relative', display: 'inline-block' }}>
-        med
+        Medi
         <span
           style={{
-            color: 'var(--peach-deep)',
+            color: '#FF5A4E',
             textShadow: dark ? 'none' : '0 2px 0 var(--line)',
             WebkitTextStroke: dark ? '0' : '2px var(--line)',
             paintOrder: 'stroke fill',
           }}
         >
-          kit
+          cate
         </span>
         <span
           style={{
@@ -438,7 +441,7 @@ export function Wordmark({ size = 36, dark = false }: WordmarkProps) {
             display: 'inline-block',
           }}
         >
-          <Doodle kind="cross" size={size * 0.34} color="#F47A92" />
+          <Doodle kind="cross" size={size * 0.34} color="#FFB800" />
         </span>
       </span>
     </div>

@@ -1,4 +1,5 @@
 import { Conversation, type ConversationListeners } from './conversation';
+import type { ChatMessage } from './claude';
 import { buildPersona, buildInitialLine, isPediatric, parentGenderFor } from './patientPersona';
 import type { PatientCase } from '../game/types';
 
@@ -58,10 +59,13 @@ export function getOrCreatePatientConversation(
   const speakerGender: 'M' | 'F' = isPediatric(patientCase)
     ? parentGenderFor(patientCase)
     : patientCase.gender;
+  // Pediatric cases are voiced by a parent — approximate a parent's age.
+  const speakerAge = isPediatric(patientCase) ? patientCase.age + 30 : patientCase.age;
   const conv = new Conversation(ctx, listeners, {
     systemPrompt: buildPersona(patientCase, setting),
     initialMessage: buildInitialLine(patientCase),
     voiceGender: speakerGender,
+    voiceAge: speakerAge,
     caseId: patientCase.id,
     // Persist per-patient history so refreshing the page or walking away
     // and back doesn't wipe the conversation — the patient remembers you.
@@ -71,9 +75,24 @@ export function getOrCreatePatientConversation(
   return conv;
 }
 
+/** Last transcript of each disposed conversation, keyed by caseId. The
+ *  encounter tears its conversation down before the debrief screen mounts,
+ *  so the n8n relay reads the transcript from here. In-memory only. */
+const lastTranscripts = new Map<string, ReadonlyArray<ChatMessage>>();
+
+/** Live transcript for `caseId` if its conversation is still open,
+ *  otherwise the snapshot taken when it was disposed. */
+export function getTranscript(caseId: string): ReadonlyArray<ChatMessage> {
+  for (const entry of store.values()) {
+    if (entry.caseId === caseId) return entry.conv.getMessages();
+  }
+  return lastTranscripts.get(caseId) ?? [];
+}
+
 export function disposePatientConversation(bedIndex: number) {
   const entry = store.get(bedIndex);
   if (entry) {
+    lastTranscripts.set(entry.caseId, [...entry.conv.getMessages()]);
     entry.conv.dispose();
     store.delete(bedIndex);
   }

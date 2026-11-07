@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles/global.css';
+import './styles/theme.css'; // Medicate restyle — remove this line (and the file) to undo
 import { clearAllConversationStorage } from './voice/conversationStore';
 
 // Each browser load = fresh shift. Old per-case chat history could otherwise

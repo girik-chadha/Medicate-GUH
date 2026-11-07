@@ -9,6 +9,8 @@ import { useAttendingDebrief } from '../agents/useAttendingDebrief';
 import { buildDebriefRequest, summariseRequest } from '../agents/debriefRequest';
 import { saveEvalHistory, getEvalHistory, type EvalHistoryEntry } from '../data/evalHistory';
 import { POLYCLINIC_DIAGNOSIS_LABELS } from '../data/polyclinicPatients';
+import { getTranscript } from '../voice/conversationStore';
+import { patientSummary, reportEncounterComplete, toTranscriptLines } from '../integrations/n8n';
 import type {
   CaseEvaluationInput,
   CriterionResult,
@@ -530,6 +532,18 @@ export function DebriefScreen() {
       verdict: evaluation.global_rating,
       evaluation,
       patientSnapshot: patient,
+    });
+    // Relay to n8n via the backend. Fire-and-forget: a failure toasts and
+    // never blocks the debrief.
+    reportEncounterComplete({
+      patient: patientSummary(c, {
+        submitted_diagnosis: patient.submittedDiagnosisId
+          ? POLYCLINIC_DIAGNOSIS_LABELS[patient.submittedDiagnosisId] ?? patient.submittedDiagnosisId
+          : null,
+        correct_diagnosis: POLYCLINIC_DIAGNOSIS_LABELS[c.correctDiagnosisId] ?? c.correctDiagnosisId,
+      }),
+      transcript: toTranscriptLines(getTranscript(c.id)),
+      grader_output: evaluation,
     });
   }, [evaluation, patient, c, reviewed]);
 

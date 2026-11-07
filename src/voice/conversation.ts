@@ -81,6 +81,8 @@ export interface ConversationOptions {
   initialMessage?: { role: 'assistant'; content: string };
   /** Speaker gender ('M'|'F') — used by backend voice picker. */
   voiceGender?: 'M' | 'F';
+  /** Approximate speaker age in years — backend picks an age-matched voice. */
+  voiceAge?: number;
   /** Stable case id — backend uses this for logging + voice slot pick. */
   caseId?: string;
   /** Preserved for back-compat. Ignored — voice ID is chosen server-side now. */
@@ -100,6 +102,7 @@ async function fetchVoiceToken(opts: {
   systemPrompt: string;
   initialLine: string;
   gender: 'M' | 'F';
+  age?: number;
 }): Promise<VoiceTokenResponse> {
   const r = await fetch('/voice/token', {
     method: 'POST',
@@ -124,6 +127,7 @@ export class Conversation {
   private systemPrompt: string;
   private initialMessage: { role: 'assistant'; content: string };
   private voiceGender: 'M' | 'F';
+  private voiceAge: number | undefined;
   private caseId: string;
   private storageKey: string | null = null;
 
@@ -142,6 +146,7 @@ export class Conversation {
     this.systemPrompt = options.systemPrompt ?? FALLBACK_PERSONA;
     this.initialMessage = options.initialMessage ?? FALLBACK_INITIAL;
     this.voiceGender = options.voiceGender ?? 'M';
+    this.voiceAge = options.voiceAge;
     this.caseId = options.caseId ?? 'unknown';
     this.storageKey = options.storageKey ?? null;
     this.ampBuf = new Uint8Array(1024);
@@ -345,6 +350,7 @@ export class Conversation {
         systemPrompt: this.systemPrompt,
         initialLine,
         gender: this.voiceGender,
+        age: this.voiceAge,
       });
 
       this.listeners.onProgress?.('Connecting to voice room…');

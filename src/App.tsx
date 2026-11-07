@@ -14,7 +14,7 @@ import { DebriefScreen } from './components/DebriefScreen';
 import { HistoryScreen } from './components/HistoryScreen';
 import { AgenticRoundsScreen } from './components/AgenticRoundsScreen';
 import { AgentTopologyScreen } from './components/AgentTopologyScreen';
-import { BackgroundMusic } from './components/BackgroundMusic';
+import { Toaster } from './components/Toaster';
 
 export default function App() {
   const screen = useScreen();
@@ -55,7 +55,7 @@ export default function App() {
       {screen === 'history' && <HistoryScreen />}
       {screen === 'agenticRounds' && <AgenticRoundsScreen />}
       {screen === 'agentTopology' && <AgentTopologyScreen />}
-      <BackgroundMusic />
+      <Toaster />
     </div>
   );
 }

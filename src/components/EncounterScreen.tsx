@@ -19,6 +19,7 @@ import {
   getExistingConversation,
   disposePatientConversation,
 } from '../voice/conversationStore';
+import { askTutor, patientSummary, toTranscriptLines } from '../integrations/n8n';
 import { TopBar } from './primitives';
 import { ExamineOverlay } from './ExamineOverlay';
 import { DockedVoicePanel } from './DockedVoicePanel';
@@ -178,6 +179,7 @@ export function EncounterScreen() {
   const [voiceActive, setVoiceActive] = useState(true);
   const [pointerLocked, setPointerLocked] = useState(false);
   const [examineOpen, setExamineOpen] = useState(false);
+  const [tutorSending, setTutorSending] = useState(false);
 
   // If the user navigated straight here without a patient set, drop the
   // current selectedCaseId in. Without this the scene shows an empty room.
@@ -391,6 +393,25 @@ export function EncounterScreen() {
             gap: 10,
           }}
         >
+          {patient && (
+            <button
+              type="button"
+              className="btn-plush ghost btn-tutor"
+              disabled={tutorSending}
+              onClick={(e) => {
+                e.stopPropagation();
+                const conv = getExistingConversation(POLYCLINIC_BED_INDEX);
+                setTutorSending(true);
+                void askTutor({
+                  patient: patientSummary(patient.case),
+                  transcript: toTranscriptLines(conv ? conv.getMessages() : []),
+                }).finally(() => setTutorSending(false));
+              }}
+              style={{ fontSize: 14, padding: '12px 18px' }}
+            >
+              {tutorSending ? 'Asking…' : 'Ask my tutor'}
+            </button>
+          )}
           <button
             type="button"
             className="btn-plush ghost"

@@ -409,7 +409,7 @@ function makeMonitorTexture(patient: MonitorPatient | null): CanvasTexture {
   ctx.fillRect(0, 0, w, 40);
   ctx.fillStyle = '#3B2A1F';
   ctx.font = 'bold 17px "Nunito", sans-serif';
-  ctx.fillText('medkit · Patient Record', 14, 26);
+  ctx.fillText('Medicate · Patient Record', 14, 26);
   ctx.fillStyle = '#5FCFA0';
   ctx.font = 'bold 12px "Nunito", sans-serif';
   ctx.fillText('● ACTIVE SESSION', w - 150, 26);

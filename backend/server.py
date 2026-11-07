@@ -136,7 +136,7 @@ def health():
             "transport": "livekit",
             "livekit_configured": livekit_ok,
             "deepgram_configured": bool(os.environ.get("DEEPGRAM_API_KEY")),
-            "cartesia_configured": bool(os.environ.get("CARTESIA_API_KEY")),
+            "elevenlabs_configured": bool(os.environ.get("ELEVENLABS_API_KEY")),
         },
         "agent": {
             "anthropic_sdk_installed": _HAS_ANTHROPIC,
@@ -145,6 +145,9 @@ def health():
             "agent_id": agent_id,
             "environment_id": env_id,
             "model": AGENT_MODEL if _HAS_ANTHROPIC else None,
+        },
+        "integrations": {
+            "n8n_configured": bool(os.environ.get("N8N_WEBHOOK_URL")),
         },
     }
 
@@ -1383,6 +1386,90 @@ async def patient_stream(req: PatientStreamRequest):
 
 
 # ───────────────────────────────────────────────────────────────────────────
+# n8n webhook relay
+# ───────────────────────────────────────────────────────────────────────────
+#
+# The browser never sees N8N_WEBHOOK_URL. It posts here; we forward to n8n
+# with a hard 10 s timeout and report success/failure so the UI can toast.
+# Two event types share the same webhook, distinguished by `type`:
+#   - "encounter_complete": patient + full transcript + grader output
+#   - "escalation":         patient + last 6 transcript lines ("Ask my tutor")
+
+import datetime as _dt
+import httpx as _httpx
+
+N8N_TIMEOUT_SECONDS = 10.0
+ESCALATION_TRANSCRIPT_LINES = 6
+
+
+class TranscriptLine(BaseModel):
+    speaker: str  # 'doctor' | 'patient'
+    text: str
+
+
+class N8nEncounterRequest(BaseModel):
+    patient: dict
+    transcript: list[TranscriptLine]
+    grader_output: dict
+
+
+class N8nEscalationRequest(BaseModel):
+    patient: dict
+    transcript: list[TranscriptLine]
+    note: Optional[str] = None
+
+
+class N8nRelayResponse(BaseModel):
+    ok: bool
+    status: Optional[int] = None
+
+
+async def _post_to_n8n(payload: dict) -> N8nRelayResponse:
+    url = os.environ.get("N8N_WEBHOOK_URL")
+    if not url:
+        raise HTTPException(status_code=503, detail="N8N_WEBHOOK_URL not configured")
+    try:
+        async with _httpx.AsyncClient(timeout=N8N_TIMEOUT_SECONDS) as client:
+            r = await client.post(url, json=payload)
+    except _httpx.TimeoutException:
+        _agent_log.warning("n8n webhook timed out after %ss (type=%s)", N8N_TIMEOUT_SECONDS, payload.get("type"))
+        raise HTTPException(status_code=504, detail="n8n webhook timed out")
+    except _httpx.HTTPError as e:
+        _agent_log.warning("n8n webhook failed (type=%s): %s", payload.get("type"), type(e).__name__)
+        raise HTTPException(status_code=502, detail="n8n webhook unreachable")
+    if r.status_code >= 400:
+        _agent_log.warning("n8n webhook returned %s (type=%s)", r.status_code, payload.get("type"))
+        raise HTTPException(status_code=502, detail=f"n8n webhook returned {r.status_code}")
+    return N8nRelayResponse(ok=True, status=r.status_code)
+
+
+def _now_iso() -> str:
+    return _dt.datetime.now(_dt.timezone.utc).isoformat()
+
+
+@app.post("/agent/n8n/encounter", response_model=N8nRelayResponse)
+async def n8n_encounter(req: N8nEncounterRequest):
+    return await _post_to_n8n({
+        "type": "encounter_complete",
+        "patient": req.patient,
+        "transcript": [line.model_dump() for line in req.transcript],
+        "grader_output": req.grader_output,
+        "timestamp": _now_iso(),
+    })
+
+
+@app.post("/agent/n8n/escalation", response_model=N8nRelayResponse)
+async def n8n_escalation(req: N8nEscalationRequest):
+    return await _post_to_n8n({
+        "type": "escalation",
+        "patient": req.patient,
+        "transcript": [line.model_dump() for line in req.transcript[-ESCALATION_TRANSCRIPT_LINES:]],
+        "note": req.note,
+        "timestamp": _now_iso(),
+    })
+
+
+# ───────────────────────────────────────────────────────────────────────────
 # Real-time voice — LiveKit access tokens
 # ───────────────────────────────────────────────────────────────────────────
 #
@@ -1405,6 +1492,7 @@ class VoiceTokenRequest(BaseModel):
     systemPrompt: str
     initialLine: str
     gender: str  # 'M' | 'F' — speaker gender (parent for pediatric)
+    age: Optional[int] = None  # approximate speaker age — picks the voice persona
     voiceId: Optional[str] = None  # explicit override
     identity: Optional[str] = None  # browser-side participant identity
 
@@ -1437,6 +1525,7 @@ async def voice_token(req: VoiceTokenRequest):
             "systemPrompt": req.systemPrompt,
             "initialLine": req.initialLine,
             "voiceGender": req.gender,
+            "voiceAge": req.age,
             "voiceId": req.voiceId,
         }
     )

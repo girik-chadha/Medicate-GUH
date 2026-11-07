@@ -1,4 +1,4 @@
----
+----
 # medicate — demo video skill
 
 The submission video is weighted heavily in judging ("Demo: is it impressive and cool to watch?"). Don't wing this — follow Tharek's HTML-design-system + Remotion pattern that Anthropic themselves use for launch videos.

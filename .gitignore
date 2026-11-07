@@ -18,7 +18,7 @@ backend/samples/*.wav
 
 tsconfig.tsbuildinfo
 
-# `skills` CLI (vercel-labs/skills) — installed locally, not committed
+# `skills` CLI (vercel-labs/skills) — installed locally, not committed.
 /.agents/
 /skills/
 /skills-lock.json

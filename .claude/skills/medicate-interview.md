@@ -1,9 +1,9 @@
 ---
-name: medkit-interview
-description: Interview the developer before building a feature or sharpening the hackathon pitch. Use when the user says "/medkit-interview", has a vague goal, or when the request could be interpreted two or more ways. Do NOT use for concrete bug fixes or typo-level edits.
+name: medicate-interview
+description: Interview the developer before building a feature or sharpening the hackathon pitch. Use when the user says "/medicate-interview", has a vague goal, or when the request could be interpreted two or more ways. Do NOT use for concrete bug fixes or typo-level edits.
 ---
 
-# medkit — interview skill
+# medicate — interview skill
 
 When the developer's ask is vague, don't jump to code. Ask them 4–6 questions, wait for answers, then propose a one-paragraph plan and wait for approval.
 

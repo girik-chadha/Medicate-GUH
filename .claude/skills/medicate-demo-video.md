@@ -1,9 +1,5 @@
 ---
-name: medkit-demo-video
-description: Produce or iterate on the hackathon submission demo video. Use when the user asks to "make the demo", "work on the video", "record a walkthrough", produce a Loom/OBS export, generate narration, or touch anything under `video/` or `docs/design-system.html`. This is the last-day polish skill — don't use it before the product functionality is locked.
----
-
-# medkit — demo video skill
+# medicate — demo video skill
 
 The submission video is weighted heavily in judging ("Demo: is it impressive and cool to watch?"). Don't wing this — follow Tharek's HTML-design-system + Remotion pattern that Anthropic themselves use for launch videos.
 

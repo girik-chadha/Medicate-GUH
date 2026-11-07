@@ -2,7 +2,6 @@
 
 Invoke via `/loop 20m /babysit-simulation`. Each tick is a 20-minute check-in against the simulator's invariants, not a free-form code generation.
 
-This loop is intentionally narrow. It does NOT generate new cases, touch the 3D scene, or modify the Managed Agent. It verifies the things that tend to regress silently during a busy hackathon day.
 
 ## Every tick, do this in order
 

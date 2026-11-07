@@ -1,11 +1,11 @@
 ---
-name: medkit-managed-agent-setup
-description: Set up, bootstrap, or modify the `medkit-attending` Claude Managed Agent. Use this skill whenever work involves src/agents/*, the backend `/agent/*` proxy endpoints, the attending system prompt, custom tool schemas, or the event-stream renderer. Also use when adding a new custom tool the agent can summon as rich UI.
+name: medicate-managed-agent-setup
+description: Set up, bootstrap, or modify the `medicate-attending` Claude Managed Agent. Use this skill whenever work involves src/agents/*, the backend `/agent/*` proxy endpoints, the attending system prompt, custom tool schemas, or the event-stream renderer. Also use when adding a new custom tool the agent can summon as rich UI.
 ---
 
-# medkit-attending Managed Agent — setup & maintenance
+# medicate-attending Managed Agent — setup & maintenance
 
-We use **one Managed Agent** (`medkit-attending`, Opus 4.7) that watches the trainee work through cases and surfaces feedback via custom-tool UI cards. The scaffolding is in place — this skill keeps its moving parts aligned.
+We use **one Managed Agent** (`medicate-attending`, Opus 4.7) that watches the trainee work through cases and surfaces feedback via custom-tool UI cards. The scaffolding is in place — this skill keeps its moving parts aligned.
 
 ## Key files
 

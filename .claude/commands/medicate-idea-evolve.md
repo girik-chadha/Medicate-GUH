@@ -2,13 +2,7 @@
 description: Propose one sharpening tweak to docs/evolution.md based on recent work. Draft-only — waits for approval before writing.
 ---
 
-# `/medkit-idea-evolve`
-
-Keep-Thinking-prize loop. Designed for `/loop 30m /medkit-idea-evolve` over
-a work session so the evolution log reflects actual thinking, not just
-the first shower-thought.
-
-## What to do
+# `/medicate-idea-evolve`
 
 1. Read `docs/evolution.md` — note the last entry date and content.
 2. Read the most recent 3 commits: `git log -3 --stat`.

@@ -22,7 +22,7 @@ const PROXY = {
     changeOrigin: true,
   },
 };
-
+#
 export default defineConfig({
   plugins: [react()],
   server: {

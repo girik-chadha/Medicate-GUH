@@ -1,6 +1,6 @@
 /**
  * Verify cross-references between the static data files. Run on every change
- * to src/data/* to catch dangling IDs before they hit the game loop.
+ * to src/data/* to catch dangling IDs before they hit the game loop
  *
  * Checks:
  * - Every PatientCase.testResults[].testId exists in TESTS.

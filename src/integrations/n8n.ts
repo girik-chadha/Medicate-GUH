@@ -1,3 +1,4 @@
+// #medicate
 // n8n relay — the browser posts to the FastAPI backend (/agent/n8n/*), which
 // forwards to N8N_WEBHOOK_URL with a 10 s timeout. The webhook URL never
 // reaches the browser. Every call is non-blocking: failures show a toast and

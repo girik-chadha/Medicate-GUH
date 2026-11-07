@@ -1,3 +1,4 @@
+// #medicate
 import { Fragment, type CSSProperties, type ReactNode } from 'react';
 import { store } from '../game/store';
 

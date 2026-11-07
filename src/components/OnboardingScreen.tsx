@@ -1,3 +1,4 @@
+// #medicate
 import type { ReactNode } from 'react';
 import { Doodle, DoodleScatter } from './primitives';
 import { store, useStore } from '../game/store';

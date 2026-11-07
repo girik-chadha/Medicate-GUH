@@ -1,3 +1,4 @@
+#medicate
 """
 FastAPI backend for the medkit simulator.
 

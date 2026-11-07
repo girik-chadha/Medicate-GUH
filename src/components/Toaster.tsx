@@ -1,3 +1,4 @@
+// #medicate
 import { useEffect, useState } from 'react';
 
 /** Minimal toast — a tiny module-level pub/sub (no state library) plus one

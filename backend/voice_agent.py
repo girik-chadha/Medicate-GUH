@@ -1,3 +1,4 @@
+#medicate
 """Grand Rounds — LiveKit voice agent (Patient persona, real-time).
 
 Runs as a separate process from the FastAPI server. Joins every LiveKit

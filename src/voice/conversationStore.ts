@@ -1,3 +1,4 @@
+// #medicate
 import { Conversation, type ConversationListeners } from './conversation';
 import type { ChatMessage } from './claude';
 import { buildPersona, buildInitialLine, isPediatric, parentGenderFor } from './patientPersona';

@@ -1,3 +1,4 @@
+// #medicate
 import { useEffect } from 'react';
 import { store, useScreen, useTweaks } from './game/store';
 import { applyIntensity, applyPalette } from './styles/palettes';

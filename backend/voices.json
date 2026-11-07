@@ -1,4 +1,5 @@
 {
+  "_tag": "#medicate",
   "_comment": "ElevenLabs voice per patient persona. The voice worker picks personas[<gender>_<band>] from the speaker's gender and age (pediatric cases are voiced by a parent). Bands: young < 35, adult 35-64, older >= 65. 'cases' overrides a specific caseId. Voice IDs verified against the account's /v1/voices list; it has no 'old' female voice, so F_older uses Lily (middle-aged). Anything unresolved falls back to 'default'. Restart the voice worker after editing.",
   "model": "eleven_flash_v2_5",
   "default": "nPczCjzI2devNBz1zQrb",

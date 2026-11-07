@@ -1,3 +1,4 @@
+<!-- #medicate -->
 # Medicate
 
 Browser-based ER + polyclinic clinical training simulator. You play the doctor: new patients arrive at triage, you talk to them in real time, order tests, treat, disposition. An attending physician (Claude Opus 4.7) watches and grades your decisions.

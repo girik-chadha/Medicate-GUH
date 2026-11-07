@@ -1,3 +1,4 @@
+// #medicate
 /**
  * Real-time voice conversation, backed by LiveKit + Deepgram + Cartesia.
  *

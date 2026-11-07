@@ -1,7 +1,5 @@
 # Medicate
 
-> **Credit:** Medicate is built on **medkit**, an open hackathon project by [@bedriyan](https://github.com/bedriyan) ([bedriyan/medkit-app](https://github.com/bedriyan/medkit-app)). The simulator, 3D clinic and AI attending grader are theirs; the original commit history is kept in this repo. Changes in this version: ElevenLabs voices (one persona → voice map in `backend/voices.json`), an n8n webhook relay with an "Ask my tutor" escalation, background music removed, the Medicate rename, and brighter accent colours. The original README says it is not licensed for redistribution, so treat this repo as a personal fork.
-
 Browser-based ER + polyclinic clinical training simulator. You play the doctor: new patients arrive at triage, you talk to them in real time, order tests, treat, disposition. An attending physician (Claude Opus 4.7) watches and grades your decisions.
 
 > Hackathon submission. Cases are plausible but synthetic — no clinical claims.

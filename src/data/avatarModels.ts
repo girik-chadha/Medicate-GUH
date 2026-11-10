@@ -1,26 +1,4 @@
-// Free / freely-licensed GLB human character models, hosted on stable,
-// CORS-enabled public origins. Every URL below was verified via WebFetch to
-// return HTTP 200 with a body that begins with the `glTF` magic bytes.
-//
-// Expansion history: the original version of this file mapped one single
-// rig onto each demographic slot, so every adult female patient rendered
-// as Mixamo Michelle, every adult male as Soldier, etc. The file now
-// exposes a *pool* of visually-distinct rigs per slot (see `AVATAR_POOLS`)
-// and a seeded `pickAvatar` so two patients with identical demographics
-// but different case IDs get different faces.
-//
-// Known caveats:
-//   * Ready Player Me's `models.readyplayer.me/<id>.glb` endpoint is not
-//     reachable from the build/test environment (ECONNREFUSED). We
-//     therefore do NOT rely on any `models.readyplayer.me` URL. The one
-//     RPM avatar we DO use is the copy that three.js mirrors on its own
-//     CDN (`threejs.org/examples/models/gltf/readyplayer.me.glb`), which
-//     has been served reliably for years.
-//   * None of the freely-hosted realistic rigs are explicitly demographic
-//     ("elderly", "teen", etc.). The Avatar component applies per-age
-//     visual treatment (scale, stoop) on top of whichever rig we pick.
-//     Elderly slots re-use the adult rigs and child/teen slots re-use the
-//     stylised/smaller rigs.
+
 
 export interface AvatarModel {
   /** Direct GLB URL. CORS-enabled, served with content-type that

@@ -1,8 +1,3 @@
-// Builds the [debrief request] payload sent to the medkit-attending Managed
-// Agent at end-of-encounter. The agent's system prompt (DEBRIEF MODE in
-// backend/server.py) declares the exact contract: case_id, rubric,
-// registry_slice, encounter_log. This module produces that JSON from the
-// in-memory PatientCase + ActivePatient.
 
 import type {
   ActivePatient,
@@ -156,10 +151,6 @@ export function buildDebriefRequest(
   };
 }
 
-/** Encode the request as a single chat-message text block. The agent
- *  reads it from the user.message it receives — no separate channel
- *  exists in the Managed Agents API, so we prefix a stable header to
- *  make the trigger unambiguous in the system prompt's DEBRIEF MODE. */
 export function debriefRequestToUserMessage(req: DebriefRequest): string {
   return [
     '[debrief request]',

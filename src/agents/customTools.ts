@@ -1,12 +1,3 @@
-// Custom tools exposed to the `medkit-attending` Managed Agent.
-//
-// The agent-side tool definitions live in `backend/server.py` as
-// `MEDKIT_CUSTOM_TOOLS` (JSON Schema, sent to `agents.create`). This file is
-// the browser-side twin: a Zod schema per tool, used to validate the
-// `input` of every `agent.custom_tool_use` event before we render it.
-//
-// If you change a schema here, update `MEDKIT_CUSTOM_TOOLS` in
-// `backend/server.py` too. They must match.
 
 import { z } from 'zod';
 
@@ -22,13 +13,6 @@ export const CUSTOM_TOOL_NAMES = [
 
 export type CustomToolName = (typeof CUSTOM_TOOL_NAMES)[number];
 
-// Per-tool permission policy. `auto` tools ack immediately with a canned
-// result so the agent can keep going. `confirm` tools block the agent
-// on a user decision — the renderer shows an approve/decline UI and the
-// caller's click decides the result payload.
-//
-// Custom tools don't go through Anthropic's permission-policy gate (that
-// covers native + MCP tools), so this is a frontend-enforced layer.
 export const CUSTOM_TOOL_PERMISSIONS = {
   render_vitals_chart: 'auto',
   render_bed_map: 'auto',
@@ -64,12 +48,6 @@ export const patientTimelineInput = z.object({
 });
 export type PatientTimelineInput = z.infer<typeof patientTimelineInput>;
 
-// ── render_case_evaluation — end-of-encounter OSCE debrief ─────────
-//
-// Replaces the old flat-score `render_case_grade`. Mirrors the JSON
-// schema in backend/server.py:render_case_evaluation. Every cited
-// `guideline_ref` should resolve in src/data/guidelines.ts via
-// `getRecommendation()` — the renderer surfaces a "?" badge if not.
 
 const verdictBand = z.enum([
   'clear-fail',

@@ -1,23 +1,4 @@
-/**
- * Browser-side client for the Managed Agent (`medkit-attending`).
- *
- * Talks to the FastAPI proxy at `/agent/*` — never directly to Anthropic.
- * The Anthropic API key lives server-side only.
- *
- * Responsibilities:
- *   - bootstrap()           — one-time create of the agent + environment,
- *                             idempotent (server returns cached IDs).
- *   - createSession()       — per-player, per-shift.
- *   - sendUserMessage()     — user.message event.
- *   - sendCustomToolResult()— reply to an agent.custom_tool_use.
- *   - sendInterrupt()       — jump the queue.
- *   - openEventStream()     — async iterator over events, with the
- *                             reconnect+dedupe pattern from
- *                             `shared/managed-agents-client-patterns.md`.
- *
- * TODO: verify event/field shapes against
- * https://platform.claude.com/docs/en/managed-agents/ before submission.
- */
+
 
 const AGENT_BASE = '/agent';
 

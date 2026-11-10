@@ -4,5 +4,4 @@
     { "source": "/voice/:path*", "destination": "https://grand-rounds-backend.onrender.com/voice/:path*" },
     { "source": "/:path*", "destination": "/" }
   ]
-  ]
 }

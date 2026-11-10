@@ -1,0 +1,6 @@
+#medicate
+livekit-agents[deepgram,elevenlabs,anthropic,silero,turn-detector]~=1.8
+# ElevenLabs TTS (replaces Cartesia). Pinned to the livekit-agents minor line;
+# the plugin reads ELEVEN_API_KEY — voice_agent.py maps ELEVENLABS_API_KEY onto it.
+livekit-plugins-elevenlabs~=1.8.11
+python-dotenv~=1.0

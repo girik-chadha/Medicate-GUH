@@ -1,0 +1,59 @@
+/* #medicate */
+/* ═══════════════════════════════════════════════════════════════════════
+   Medicate bright accents — on top of the ORIGINAL look (global.css).
+   Only three things change: bright heading / big-number colours, bright
+   buttons, and (in the components) the wordmark colours.
+
+   Undo: delete this file and its import line in src/main.tsx.
+
+   Contrast (checked against the original cream #FFF6E6, cream-2 #FFEFD1
+   and white): the pure brand brights are too light for text on these
+   backgrounds, so text uses slightly deeper versions of the same hues.
+     teal  #00B8A9 → text #007A70   (3.1:1 on peach card … 5:1 on cream)
+     coral #FF5A4E → text #D63A2F   (3.3:1 on mint card … 4.3:1 on cream)
+     sky   #1EA7FF → text #0A8FE0   (3.1–3.5:1)
+     yellow #FFB800 is 1.6:1 on cream — icons only, never text.
+   Buttons carry small white text (needs 4.5:1):
+     fill  #008577 (white 4.5:1), hover coral #D9362B (white 4.7:1).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --bright-teal: #00B8A9;
+  --bright-coral: #FF5A4E;
+  --bright-sky: #1EA7FF;
+  --bright-yellow: #FFB800;
+
+  /* Headings also sit on the original pastel cards (peach/mint/sky), so they
+     use one step deeper: ≥ 3:1 on every original background. */
+  --teal-text: #007A70;
+  --coral-text: #D63A2F;
+  --sky-text: #0A8FE0;
+
+  --btn-teal: #008577;
+  --btn-coral: #D9362B;
+
+  /* Body text: dark slate */
+  --ink: #0F172A;
+}
+
+/* Headings — vivid, large text only (h1/h2 are always ≥ 24px here) */
+h1 { color: var(--teal-text) !important; }
+h2 { color: var(--coral-text) !important; }
+
+/* Big display numbers / titles: heavy inline text at 20px+ (not the wordmark) */
+[style*="font-weight: 900"][style*="font-size: 2"]:not(.wordmark):not(.wordmark *):not([style*="color: white"]),
+[style*="font-weight: 900"][style*="font-size: 3"]:not(.wordmark):not(.wordmark *):not([style*="color: white"]),
+[style*="font-weight: 900"][style*="font-size: 4"]:not(.wordmark):not(.wordmark *):not([style*="color: white"]) {
+  color: var(--sky-text) !important;
+}
+
+/* Buttons — bright teal with white text, coral on hover */
+.btn-plush,
+.btn-plush.primary,
+.btn-plush.ghost,
+.btn-plush.mint,
+.btn-plush.sky {
+  background: var(--btn-teal) !important;
+  color: #FFFFFF !important;
+}
+.btn-plush:hover:not(:disabled) { background: var(--btn-coral) !important; }

@@ -371,7 +371,7 @@ export function TopBar({
           title="Open profile"
           style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
         >
-          <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--ink-2)' }}>Bedirhan</span>
+          <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--ink-2)' }}>Girik</span>
           <div
             style={{
               width: 36,
@@ -387,7 +387,7 @@ export function TopBar({
               fontSize: 14,
             }}
           >
-            B
+            G
           </div>
         </div>
       ) : (

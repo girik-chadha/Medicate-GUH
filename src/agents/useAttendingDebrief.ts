@@ -1,16 +1,4 @@
-// Hook that drives an end-of-encounter debrief through the medkit-attending
-// Managed Agent.
-//
-// Lifecycle:
-//   1. Caller passes a `DebriefRequest` (built via buildDebriefRequest).
-//      The hook does nothing until `request` becomes non-null AND `enabled`
-//      is true — that's the trigger.
-//   2. bootstrap (idempotent), createSession, sendUserMessage with the
-//      [debrief request] body, then openEventStream.
-//   3. Auto-ack any `auto`-permission custom tool calls. Surface a
-//      `render_case_evaluation` invocation as the final result (validated
-//      via parseCustomToolUse).
-//   4. Cleanup on unmount via AbortSignal.
+
 
 import { useEffect, useState } from 'react';
 import {
@@ -62,11 +50,7 @@ export function useAttendingDebrief(
   const [evaluation, setEvaluation] = useState<CaseEvaluationInput | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [partialNarration, setPartial] = useState('');
-  // Effect deps the request reference directly; useMemo at the call site
-  // stabilises it across non-load-bearing re-renders. Under React 18
-  // StrictMode the effect fires twice in dev — the first run's cleanup
-  // aborts its controller, the second run starts fresh. That's fine: each
-  // run creates its own session.
+
 
   useEffect(() => {
     if (!enabled || !request) return;
@@ -169,8 +153,7 @@ async function consumeStream(
       const input = (ev as { input?: unknown }).input;
       const parsed = parseCustomToolUse(toolName, input);
       if (!parsed.ok) {
-        // Reply with an error so the agent knows the input was bad — don't
-        // crash the stream. The agent can choose to retry.
+
         await sendCustomToolResult(
           sessionId,
           toolUseId,
